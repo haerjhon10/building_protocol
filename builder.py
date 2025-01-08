@@ -69,20 +69,20 @@ def create_inspection_protocol(title, sections):
     doc.save(file_path)
     return file_path
 
-st.title("Dynamic Inspection Protocol Generator")
+st.title("מחולל פרוטוקול בניה")
 
 if 'sections' not in st.session_state:
     st.session_state.sections = {}
 
-title = st.text_input("Document Title", "פרוטוקול מסירת מבנה בית כנסת - בדיקות נדרשות")
+title = st.text_input("כותרת המסמך", "פרוטוקול מסירת מבנה שם הפרויקט - בדיקות נדרשות")
 
 # Space management
 col1, col2, col3 = st.columns([0.6, 0.2, 0.2])
 with col1:
-    new_section_name = st.text_input("Add a New Space (Section Name)")
+    new_section_name = st.text_input("הוסף חלל חדש")
 with col2:
     st.write("")
-    if st.button("Add Space", use_container_width=True) and new_section_name:
+    if st.button("הוסף", use_container_width=True) and new_section_name:
         st.session_state.sections[new_section_name] = DEFAULT_TESTS.copy()
         st.rerun()
 
@@ -90,13 +90,13 @@ with col2:
 for section_name in list(st.session_state.sections.keys()):
     st.subheader(section_name)
     
-    if st.button(f"Delete Space {section_name}"):
+    if st.button(f"מחק {section_name}"):
         del st.session_state.sections[section_name]
         st.rerun()
         
     # Test management
-    test_input = st.text_input(f"Add a test for {section_name}", key=f"test_{section_name}")
-    if st.button(f"Add Test to {section_name}", key=f"add_test_{section_name}"):
+    test_input = st.text_input(f"הוסף בדיקה ל{section_name}", key=f"test_{section_name}")
+    if st.button(f"הוסף בדיקה", key=f"add_test_{section_name}"):
         if test_input:
             st.session_state.sections[section_name].append(test_input)
             st.rerun()
@@ -107,13 +107,13 @@ for section_name in list(st.session_state.sections.keys()):
         with cols[0]:
             st.write(f"- {test}")
         with cols[1]:
-            if st.button("Delete", key=f"delete_{section_name}_{idx}"):
+            if st.button("מחק", key=f"delete_{section_name}_{idx}"):
                 st.session_state.sections[section_name].pop(idx)
                 st.rerun()
 
-if st.button("Generate Document"):
+if st.button("צור מסמך"):
     file_path = create_inspection_protocol(title, st.session_state.sections)
     with open(file_path, "rb") as f:
         b64 = base64.b64encode(f.read()).decode()
-        href = f'<a href="data:application/octet-stream;base64,{b64}" download="inspection_protocol.docx">Download Document</a>'
+        href = f'<a href="data:application/octet-stream;base64,{b64}" download="inspection_protocol.docx">הורד מסמך</a>'
         st.markdown(href, unsafe_allow_html=True)
