@@ -8,6 +8,7 @@ from docx.oxml.ns import nsdecls
 import base64
 
 DEFAULT_TESTS = [
+    "דלת הכניסה",
     "ריצוף",
     "חזות הגמר והצביעה",
     "אלומיניום",
